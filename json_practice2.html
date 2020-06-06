@@ -42,19 +42,19 @@
                 url: "http://openapi.seoul.go.kr:8088/6d4d776b466c656533356a4b4b5872/json/bikeList/1/99",
                 data: {},
                 success: function(response) {
-                    if (response["rentBikeStatus"]["RESULT"]["CODE"] == "INFO==-000") {
+                    if (response["rentBikeStatus"]["RESULT"]["CODE"] == "INFO-000") {
                         let rows = response["rentBikeStatus"]["row"];
                         for (let i = 0; i < rows.length; i++) {
                             let rack_name = rows[i]['stationName'];
                             let rack_cnt = rows[i]['rackTotCnt'];
                             let bike_cnt = rows[i]['parkingBikeTotCnt'];
-                            let temp_html = ''
+                            let temp_html = '';
                             if (bike_cnt < 5) {
-                                `<tr class="urgent">\ 
-                                <td>'+ rack_name + '</td>\
-                                <td>'+ rack_cnt + '</td>\
-                                <td>'+ bike_cnt + '</td>\
-                        </tr>`
+                                temp_html = '<tr class="urgent">\
+                                <td>' + rack_name + '</td>\
+                                <td>' + rack_cnt + '</td>\
+                                <td>' + bike_cnt + '</td>\
+                              </tr>'
                             } else {
                                 temp_html = '<tr>\
                                 <td>' + rack_name + '</td>\
@@ -63,6 +63,7 @@
                               </tr>'
                             }
                             $('#names-q1').append(temp_html);
+
                         }
                     } else {
                         alert(["rentBikeStatus"]["RESULT"]["MESSAGE"])

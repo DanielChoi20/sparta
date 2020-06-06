@@ -5,23 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Used car for reasonable price </title>
-    <link rel="stylesheet" href="hw1style.css">
-    <style>
-        .product {
-            width: 500px;
-            margin: 30px auto;
-            padding: 30px;
-        }
-        
-        .submission {
-            text-align: center;
-        }
-    </style>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="hw1style.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            // $('#names-q1').empty();
+            // alert('다 로딩됐다!')
+            $.ajax({
+                    type: "GET",
+                    url: "https://api.manana.kr/exchange/rate.json",
+                    data: {},
+                    success: function(response) {
+                        $("#meaning").text(response);
+                        // if (response[name] == "USDKRW=X") {
+                        //     let temp_html = response[rate];
+                    }
+
+                }
+            })
+        });
+    </script>
 </head>
 
 <body>
@@ -29,6 +35,8 @@
         <img src="https://ichef.bbci.co.uk/news/1024/cpsprodpb/11490/production/_111700807_mediaitem111700806.jpg" height="300" width="450">
         <h1> Tesla Model 3 <span style="font-size: medium;"> Price: $39,990  </span></h1>
         <p style="font-size:18px">Home charger is not included. Subsidy rate varies by States. Provide 5 years guarantee for malfunctioning.</p>
+        <p style="color:blue"> USD - KRW exchange rate is: </p>
+        <h5 id="meaning"></h5>
 
 
         <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
@@ -44,8 +52,8 @@
             <label class="input-group-text" for="inputGroupSelect01">Color</label>
             <div class="btn-group" role="group">
                 <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Choose your color
-        </button>
+                         Choose your color
+                </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                     <a class="dropdown-item" href="#">Black</a>
                     <a class="dropdown-item" href="#">Red</a>
@@ -79,7 +87,6 @@
     <div class="submission">
         <button type="button" class="btn btn-primary">Order Now</button>
     </div>
-
 
 </body>
 

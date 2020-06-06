@@ -1,13 +1,9 @@
-<style>.product {
-    color: white;
-    width: 300px;
-    height: 200px;
-    background-image: url('https://ichef.bbci.co.uk/news/1024/cpsprodpb/11490/production/_111700807_mediaitem111700806.jpg');
-    background-position: center;
-    background-size: cover;
-    border-radius: 10px;
-    text-align: center;
-    padding-top: 40px;
+.product {
+    width: 500px;
+    margin: 30px auto;
+    padding: 30px;
 }
 
-</style>
+.submission {
+    text-align: center;
+}
