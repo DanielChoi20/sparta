@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title> Used car for reasonable price </title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- 구글폰트 -->
+    <link href="https://fonts.googleapis.com/css?family=Stylish&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon&display=swap" rel="stylesheet">
+
+    <style>
+        .product {
+            width: 500px;
+            margin: 30px auto;
+            padding: 30px;
+        }
+        
+        .order {
+            text-align: center;
+        }
+    </style>
+
+
+    <script type="text/javascript">
+        function make_order() {
+            // 1. 제목, 저자, 리뷰 내용을 가져옵니다.
+            let name = $('#name').val();
+            let address = $('#address').val();
+            let phone = $('#phone').val();
+
+            // 2. 제목, 저자, 리뷰 중 하나라도 입력하지 않았을 경우 alert를 띄웁니다.
+            if (name == '') {
+                alert('type your name');
+                $('#name').focus();
+                return;
+            } else if (address == '') {
+                alert('type your delivery address');
+                $('#address').focus();
+                return;
+            } else if (phone == '') {
+                alert('type your phone number');
+                $('#phone').focus();
+                return;
+            }
+
+            $.ajax({
+                type: 'POST', // 타입을 작성합니다.
+                url: '/orderform', // url을 작성합니다.
+                data: {
+                    name_give: name,
+                    address_give: address,
+                    phone_give: phone
+                },
+                success: function(response) {
+                    if (response['result'] == 'success') {
+                        alert(response['msg']);
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $('#posting-box').html('');
+            listing();
+        });
+
+        $.ajax({
+            type: "GET",
+            url: "https://api.manana.kr/exchange/rate.json",
+            data: {},
+            success: function(response) {
+                let usd = response[1]
+                let rate = usd['rate'];
+                $('div.product span.rate').text(rate);
+            }
+        })
+
+        function listing() {
+            $.ajax({
+                type: "GET",
+                url: "/orderform",
+                data: {},
+                success: function(response) {
+                    if (response['result'] == 'success') {
+                        let orderList = response['orderList'];
+                        for (let i = 0; i < orderList.length; i++) {
+                            make_card(orderList[i]['name'], orderList[i]['address'], orderList[i]['phone']);
+                        }
+                    } else {
+                        alert('주문을 받아오지 못했습니다');
+                    }
+                }
+            });
+        }
+
+        function make_card(name, address, phone) {
+            let temp_html = `<tr>
+                        <td>${name}</td>
+                        <td>${address}</td>
+                        <td>${phone}</td>
+                    </tr>`;
+            $('#posting-box').append(temp_html);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="product">
+        <img src="https://ichef.bbci.co.uk/news/1024/cpsprodpb/11490/production/_111700807_mediaitem111700806.jpg" height="300" width="450">
+        <h1> Tesla Model 3 <span style="font-size: medium;"> Price: $39,990  </span></h1>
+        <p style="font-size:18px">Home charger is not included. Subsidy rate varies by States. Provide 5 years guarantee for malfunctioning.</p>
+        <!-- <p style="color:blue"> USD - KRW exchange rate is: </p> -->
+        <p class="exr"> USD - KRW exchange rate is: <span class="rate">-</span></p>
+        <h5 id="meaning"></h5>
+
+
+        <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">name</div>
+                </div>
+                <input type="text" class="form-control" id="name" placeholder="ex) Daniel Choi" aria-label="Input group example" aria-describedby="basic-addon3">
+            </div>
+        </div>
+
+
+        <!-- <div class="btn-toolbar mb-3" role="toolbar" aria-label="Button group with nested dropdown">
+            <label class="input-group-text" for="inputGroupSelect01">Color</label>
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                         Choose your color
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                    <a class="dropdown-item" href="#">Black</a>
+                    <a class="dropdown-item" href="#">Red</a>
+                    <a class="dropdown-item" href="#">Gray</a>
+                    <a class="dropdown-item" href="#">Blue</a>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+            <div style="padding-bottom:5px;">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"> address </div>
+                    </div>
+                    <input type="text" class="form-control" id="address" placeholder="with postal code" aria-label="Input group example" aria-describedby="btnGroupAddon2">
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
+            <div style="padding-bottom:5px;">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"> phone </div>
+                    </div>
+                    <input type="number" class="form-control" id="phone" placeholder="+00-000-0000" aria-label="Input group example" aria-describedby="btnGroupAddon2">
+                </div>
+            </div>
+        </div>
+
+        <div class="order">
+            <button class="make_order" onclick="make_order()">Order Now</button>
+            <!-- <button oneclick="make_order()" type="button" class="btn btn-primary">Order Now</button> -->
+        </div>
+
+        <div class="orders">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="meta_info" scope="col">name</th>
+                        <th class="meta_info" scope="col">address</th>
+                        <th class="meta_info" scope="col">phone</th>
+                    </tr>
+                </thead>
+                <tbody id="posting-box">
+                    <tr>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>Otto</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+</body>
+
+</html>
